@@ -3,7 +3,7 @@ package com.example.demo;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
-@SpringBootApplication
+@SpringBootApplication // この class が springboot のアプリケーションクラスであることを示す
 public class MyBootGradleApplication {
 
 	public static void main(String[] args) {
