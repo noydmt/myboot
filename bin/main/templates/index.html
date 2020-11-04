@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+<style>
+h1{ font-size: 18pt; }
+body{ font-size:13pt; }
+postedResult{border:1px black solid; margin: 30px; padding:20px;}
+</style>
+</head>
+<body>
+	<h1>hello sample page</h1>
+	<p>this is sample page of thymeleaf</p>
+	<p class="msg" th:text="${msg}">this is not model</p>
+	<form method="post" action="/">
+	   <div>
+	   		<label>氏名</label>
+	   		<input type="text" name="fullName" th:value="${fullName}" placeholder="田中太郎"/>
+	   </div>
+	   <div>
+	   		<label>住所</label>
+	   		<input type="text" name="adress" th:value="${adress}" placeholder="東京都千代田区"/>
+	   </div>
+	   <div>
+			<input type="radio" name="sex" id="radio1" value="男"/>
+			<label for="radio1">男</label>
+		</div>
+		<div>
+			<input type="radio" name="sex" id="radio2" value="女"/>
+			<label for="radio2">女</label>
+		</div>
+	　　<div>
+			<label>OS</label>
+			<select name="os">
+				<option value="windows">Windows</option>
+				<option value="mac">Mac</option>
+				<option value="linux">linux</option>
+			</select>
+		</div>
+		<div>
+			<input type="checkbox" name="apply" id="checkbox1" />
+			<label for="checkbox1">同意する</label>
+		</div>
+		<div><input type="text" name="memo" th:value="${memo}" placeholder="備考欄"/></div>
+		<input type="submit" value="Click" />
+	</form>
+	<div class="postedResult">
+		<label th:text="${postedMsg}">送信内容</label>
+		<p th:text="${postedFullName}"></p>
+		<p th:text="${postedAdress}"></p>
+		<p th:text="${postedSex}"></p>
+		<p th:text="${postedOs}"></p>
+		<p th:text="${postedIsApply}"></p>
+		<p th:text="${postedMemo}"></p>
+	</div>
+</body>
+</html>

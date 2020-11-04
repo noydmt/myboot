@@ -1,19 +1,44 @@
 package com.example.demo;
 
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
+// import org.springframework.web.bind.annotation.RestController;
 
-@RestController
+// @RestController
+@Controller
 public class HelloController {
 	String[] names = {"tanaka","sato","kato","suzuki","simizu"};
 	String[] emails = {"tanaka@email.com","sato@email.com","kato@email.com","suzuki@email.com","simizu@email.com"};
 
-	@RequestMapping("/")
-	public String index() {
-		return "Welcome to MyBootGradleApplication!";
+	@RequestMapping(value="/", method=RequestMethod.GET)
+	public String index(Model model) {
+		model.addAttribute("msg", "フォームを送信してください");
+		return "index";
 	}
-	@RequestMapping("/{num}")
+	@RequestMapping(value="/", method=RequestMethod.POST)
+	public String indexPost(
+			Model model,
+			@RequestParam("fullName")String fullName,
+			@RequestParam("adress")String adress,
+			@RequestParam("memo")String memo,
+			@RequestParam(value="sex",required=false)String sex,
+			@RequestParam(value="os",required=false)String os,
+			@RequestParam(value="apply",required=false)boolean isApply
+			) {
+		model.addAttribute("postedMsg", "送信内容");
+		model.addAttribute("postedFullName", fullName);
+		model.addAttribute("postedAdress", adress);
+		model.addAttribute("postedSex", sex);
+		model.addAttribute("postedOs", os);
+		model.addAttribute("postedIsApply", isApply);
+		model.addAttribute("postedMemo", memo);
+		return "index";
+	}
+	@RequestMapping(value="/{num}")
 	public String indexWithParam(@PathVariable int num) {
 		int res = 0;
 		for(int i = 0; i <= num; i++) {
@@ -22,7 +47,7 @@ public class HelloController {
 		String strRes = String.valueOf(res);
 		return "合計は" + strRes;
 	}
-	@RequestMapping("/id/{id}")
+	@RequestMapping(value="/id/{id}")
 	public obj getId(@PathVariable int id) {
 		return new obj(id, names[id], emails[id]);
 	}
@@ -33,7 +58,6 @@ public class HelloController {
 		private String email;
 
 		public obj(int id, String name, String email) {
-			// super();
 			this.setId(id);
 			this.setName(name);
 			this.setEmail(email);
