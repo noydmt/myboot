@@ -11,8 +11,10 @@ postedResult{border:1px black solid; margin: 30px; padding:20px;}
 </head>
 <body>
 	<h1>hello sample page</h1>
-	<p>this is sample page of thymeleaf</p>
 	<p class="msg" th:text="${msg}">this is not model</p>
+
+	<pre th:text="${data}"></pre>
+
 	<form method="post" action="/">
 	   <div>
 	   		<label>氏名</label>
