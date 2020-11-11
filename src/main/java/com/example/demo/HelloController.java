@@ -2,15 +2,12 @@ package com.example.demo;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-// import org.springframework.ui.Model;
-// import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
-// import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.example.demo.repositories.MyDataRepository;
-// import org.springframework.web.bind.annotation.RestController;
 
 // @RestController JSON形式のデータを返す => Restfulなサービス作成
 @Controller
@@ -24,12 +21,18 @@ public class HelloController {
 	MyDataRepository repository; // => MyDataRepository(インターフェース) => 無名クラス => インスタンス => Bean => Beanのインスタンス
 
 	@RequestMapping(value="/", method=RequestMethod.GET)
-	public ModelAndView index(ModelAndView mav) {
-		mav.setViewName("index");
-		mav.addObject("msg", "サンプル");
+	public ModelAndView index(@ModelAttribute("formModel") MyData myData, ModelAndView mav) {
 		Iterable<MyData> list = repository.findAll();
-		mav.addObject("data", list);
+		mav.addObject("datalist", list);
+		mav.setViewName("index");
+		mav.addObject("msg", "サンプルフォーム");
 		return mav;
+	}
+
+	@RequestMapping(value="/", method=RequestMethod.POST)
+	public ModelAndView create(@ModelAttribute("formModel") MyData myData, ModelAndView mav) {
+		repository.saveAndFlush(myData);
+		return new ModelAndView("redirect:/");
 	}
 
 //	String[] names = {"tanaka","sato","kato","suzuki","simizu"};
