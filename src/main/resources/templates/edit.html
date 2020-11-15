@@ -6,6 +6,7 @@
 </head>
 <body>
 	<h2>編集ページ</h2>
+	<p class="alert" th:text="${msg}">this is alert</p>
 	<form method="post" action="/edit" th:object="${dataObject}">
 		<table>
 			<tr><td>項目</td><td>値</td></tr>
@@ -17,5 +18,11 @@
 			<tr><td></td><td><input type="submit" value="送信"></td></tr>
 		</table>
 	</form>
+	<script th:inline="javascript">
+		/*<![CDATA[*/
+			var message = [[${msg}]];
+			if(message != null) alert(message);
+		/*]]>*/
+	</script>
 </body>
 </html>

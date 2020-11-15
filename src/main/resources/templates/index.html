@@ -11,7 +11,6 @@ postedResult{border:1px black solid; margin: 30px; padding:20px;}
 </head>
 <body>
 	<h1>hello sample page</h1>
-	<p class="msg" th:text="${msg}">this is not model</p>
 	<pre th:text="${data}"></pre>
 	<form method="post" action="/" th:object="${formModel}">
 		<table>
@@ -31,5 +30,11 @@ postedResult{border:1px black solid; margin: 30px; padding:20px;}
 			<td th:text="${obj.memo}"></td>
 		</tr>
 	</table>
+	<script th:inline="javascript">
+		/*<![CDATA[*/
+			var message = [[${msg}]];
+			if(message != null) alert(message);
+		/*]]>*/
+	</script>
 </body>
 </html>
