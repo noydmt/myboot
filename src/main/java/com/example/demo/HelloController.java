@@ -1,13 +1,18 @@
 package com.example.demo;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.ModelAndView;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
-import com.example.demo.repositories.MyDataRepository;
+import com.example.demo.service.MyDataService;
 
 // @RestController JSON形式のデータを返す => Restfulなサービス作成
 @Controller
@@ -17,12 +22,12 @@ public class HelloController {
 	 * 2, Controller クラスがロードされる際に@Autowiredが指定されているフィールドが存在する時、登録済みのBeanから同じクラスのものを検索し、自動的に
 	 * 　　そのBeanのインスタンスをフィールドに割り当てる
 	 */
-	@Autowired // 自動的にインスタンスが生成 => MyDataRepositoryってインターフェースだよ？ => Spring MVC により無名クラスのインスタンスが作成
-	MyDataRepository repository; // => MyDataRepository(インターフェース) => 無名クラス => インスタンス => Bean => Beanのインスタンス
+	@Autowired
+	MyDataService service;
 
 	@RequestMapping(value="/", method=RequestMethod.GET)
-	public ModelAndView index(@ModelAttribute("formModel") MyData myData, ModelAndView mav) {
-		Iterable<MyData> list = repository.findAll();
+	public ModelAndView index(ModelAndView mav) {
+		List<MyData> list = service.selectAll();
 		mav.addObject("datalist", list);
 		mav.setViewName("index");
 		mav.addObject("msg", "サンプルフォーム");
@@ -30,8 +35,29 @@ public class HelloController {
 	}
 
 	@RequestMapping(value="/", method=RequestMethod.POST)
+	@Transactional(readOnly=false)
 	public ModelAndView create(@ModelAttribute("formModel") MyData myData, ModelAndView mav) {
-		repository.saveAndFlush(myData);
+		service.create(myData);
+		return new ModelAndView("redirect:/");
+	}
+
+	@RequestMapping(value="/{id}", method=RequestMethod.GET)
+	public ModelAndView create(ModelAndView mav, @PathVariable int id) {
+		MyData data = service.findById((long) id);
+		mav.addObject("dataObject", data);
+		mav.setViewName("edit");
+		return mav;
+	}
+
+	@RequestMapping(value="/edit", method=RequestMethod.POST)
+	@Transactional(readOnly=false)
+	public ModelAndView update(RedirectAttributes redirectAttributes, @ModelAttribute("dataObject") MyData myData,
+			ModelAndView mav) {
+		if(service.exist(myData)) {
+			service.update(myData);
+			String strId = String.valueOf(myData.getId());
+			return new ModelAndView("redirect:/" + strId);
+		}
 		return new ModelAndView("redirect:/");
 	}
 
