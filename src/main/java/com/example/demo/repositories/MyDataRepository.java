@@ -15,5 +15,4 @@ import com.example.demo.MyData;
  */
 @Repository // データアクセスのクラスであることを表す
 public interface MyDataRepository extends JpaRepository<MyData, Long> {
-
 }
