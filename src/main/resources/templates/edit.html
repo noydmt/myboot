@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>edit page</title>
+</head>
+<body>
+	<h2>編集ページ</h2>
+	<form method="post" action="/edit" th:object="${dataObject}">
+		<table>
+			<tr><td>項目</td><td>値</td></tr>
+			<input type="hidden" name="id" th:value="*{id}" />
+			<tr><td><label>氏名: </label></td><td><input type="text" name="name" th:value="*{name}"></td></tr>
+			<tr><td><label>年齢: </label></td><td><input type="text" name="age" th:value="*{age}"></td></tr>
+			<tr><td><label>メールアドレス: </label></td><td><input type="mail" name="mail" th:value="*{mail}"></td></tr>
+			<tr><td><label>メモ: </label></td><td><textarea cols="20" rows="5" name="memo" th:text="*{memo}"></textarea></td></tr>
+			<tr><td></td><td><input type="submit" value="送信"></td></tr>
+		</table>
+	</form>
+</body>
+</html>
