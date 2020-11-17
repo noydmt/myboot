@@ -44,10 +44,25 @@ public class MyDataService {
 		repository.saveAndFlush(data);
 	}
 
+	// 一件、レコード削除
+	public void delete(int id) {
+		long longId = id;
+		repository.deleteById(longId);
+	}
+
 	// 存在チェック
 	public boolean exist(MyData data) {
 		long id = data.getId();
 		if(!(repository.existsById(id))) {
+			return false;
+		}
+		return true;
+	}
+
+	// 存在チェック
+	public boolean exist(int id) {
+		long longId = id;
+		if(!(repository.existsById(longId))) {
 			return false;
 		}
 		return true;

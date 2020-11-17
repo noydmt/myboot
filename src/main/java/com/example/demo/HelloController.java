@@ -9,7 +9,6 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
@@ -57,6 +56,18 @@ public class HelloController {
 		if(service.exist(myData)) {
 			service.update(myData);
 			redirectAttributes.addFlashAttribute("msg", "更新完了");
+		} else {
+			redirectAttributes.addFlashAttribute("msg", "存在しないデータです。");
+		}
+		return "redirect:/";
+	}
+
+	@RequestMapping(value="/delete/{id}", method=RequestMethod.POST)
+	@Transactional(readOnly=false)
+	public String delete(@PathVariable int id, RedirectAttributes redirectAttributes) {
+		if(service.exist(id)) {
+			service.delete(id);
+			redirectAttributes.addFlashAttribute("msg", "削除しました。");
 		} else {
 			redirectAttributes.addFlashAttribute("msg", "存在しないデータです。");
 		}

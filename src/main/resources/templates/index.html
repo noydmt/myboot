@@ -22,18 +22,31 @@ postedResult{border:1px black solid; margin: 30px; padding:20px;}
 		</table>
 	</form>
 	<table>
-		<tr><td>ID</td><td>名前</td><td>年齢</td><td>メモ</td></tr>
+		<tr><td>ID</td><td>名前</td><td>年齢</td><td>メモ</td><td></td><td></td></tr>
 		<tr th:each="obj : ${datalist}">
-			<td th:text="${obj.id}"></td>
-			<td th:text="${obj.name}"></td>
-			<td th:text="${obj.age}"></td>
-			<td th:text="${obj.memo}"></td>
+			<form method="post" id="deleteForm" th:action="@{/delete/{id}(id=${obj.id})}">
+				<td th:text="${obj.id}" id="id"></td>
+				<td th:text="${obj.name}" id="name"></td>
+				<td th:text="${obj.age}" id="age"></td>
+				<td th:text="${obj.memo}" id="memo"></td>
+				<td id="editBtn"><a th:href="@{/{id}(id=${obj.id})}">edit</a></td>
+				<td><Button id="deleteBtn">delete</Button></td>
+			</form>
 		</tr>
 	</table>
 	<script th:inline="javascript">
 		/*<![CDATA[*/
 			var message = [[${msg}]];
 			if(message != null) alert(message);
+
+			var deleteForm = document.getElementById('deleteForm');
+			var deleteBtn = document.getElementById('deleteBtn');
+			deleteBtn.addEventListener('click', function(){
+				var ret = confirm("削除します。よろしいですか？");
+				if(ret) {
+					deleteForm.submit();
+				}
+			}, false)
 		/*]]>*/
 	</script>
 </body>
