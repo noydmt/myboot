@@ -8,14 +8,29 @@
 	<h2>編集ページ</h2>
 	<p class="alert" th:text="${msg}">this is alert</p>
 	<form method="post" action="/edit" th:object="${dataObject}">
+		<input type="hidden" name="id" th:field="*{id}">
 		<table>
-			<tr><td>項目</td><td>値</td></tr>
-			<input type="hidden" name="id" th:value="*{id}" />
-			<tr><td><label>氏名: </label></td><td><input type="text" name="name" th:value="*{name}"></td></tr>
-			<tr><td><label>年齢: </label></td><td><input type="text" name="age" th:value="*{age}"></td></tr>
-			<tr><td><label>メールアドレス: </label></td><td><input type="mail" name="mail" th:value="*{mail}"></td></tr>
-			<tr><td><label>メモ: </label></td><td><textarea cols="20" rows="5" name="memo" th:text="*{memo}"></textarea></td></tr>
-			<tr><td></td><td><input type="submit" value="送信"></td></tr>
+			<tr>
+				<div>名前 : <input type="text" name="name" th:field="*{name}" th:errorclass="err"></div>
+				<div th:if="${#fields.detailedErrors('name')}" th:errors="*{name}" th:errorclass="err"></div>
+			</tr>
+			<tr />
+			<tr>
+				<div>年齢 : <input type="text" name="age" th:field="*{age}"></div>
+				<div th:if="${#fields.detailedErrors('age')}" th:errors="*{age}" th:errorclass="err"></div>
+			</tr>
+			<tr />
+			<tr>
+				<div>メール : <input type="text" name="mail" th:field="*{mail}"></div>
+				<div th:if="${#fields.detailedErrors('mail')}" th:errors="*{mail}" th:errorclass="err"></div>
+			</tr>
+			<tr />
+			<tr>
+				<div>メモ</div>
+				<div><textarea name="memo" cols="20" rows="5" th:field="*{memo}"></textarea></div>
+			</tr>
+			<tr />
+			<tr><td></td><td><input type="submit" value="submit"></td></tr>
 		</table>
 	</form>
 	<script th:inline="javascript">

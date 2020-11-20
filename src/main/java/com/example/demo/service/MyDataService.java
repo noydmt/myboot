@@ -53,7 +53,7 @@ public class MyDataService {
 	// 存在チェック
 	public boolean exist(MyData data) {
 		long id = data.getId();
-		if(!(repository.existsById(id))) {
+		if(!repository.existsById(id)) {
 			return false;
 		}
 		return true;

@@ -5,6 +5,14 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Table;
+import javax.validation.constraints.Email;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotEmpty;
+
+import org.hibernate.validator.constraints.Range;
+
+import com.sun.istack.NotNull;
+
 import javax.persistence.Id;
 
 @Entity // Entity クラスであることを示す
@@ -14,15 +22,21 @@ public class MyData {
 	@Id // primary key
 	@GeneratedValue(strategy = GenerationType.AUTO) // 自動で値を割り振る、 primaryKey の為
 	@Column // カラム名、記述しない場合はフィールド名がカラム名に成りかわる
+	@NotNull
 	private long id;
 
 	@Column(length = 50, nullable = false) // length : 最大の長さ(文字数) nullable : nullを許可するか
+	@NotEmpty(message="名前を入力してください") // 半角全角スペース許容したいから
 	private String name;
 
-	@Column(length = 200, nullable = true)
+	@Column(length = 200, nullable = false)
+	@NotBlank // 出来るだけスペースを許容したくない (このままだと全角スペースは許容してしまう)
+	@Email(message="メールアドレスを入力してください")
 	private String mail;
 
-	@Column(length = 3, nullable = true)
+	@Column(length = 3, nullable = false)
+	@NotBlank(message="年齢を入力してください")
+	@Range(min=0, max=120, message="0歳以上120歳以下") // 年齢はマイナス値はダメ
 	private String age;
 
 	@Column(nullable = true)
