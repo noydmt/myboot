@@ -3,12 +3,16 @@ package com.example.demo.service;
 import java.util.List;
 import java.util.Optional;
 
+import javax.annotation.PostConstruct;
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
 import javax.transaction.Transactional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.example.demo.MyData;
+import com.example.demo.dao.MyDataDaoImpl;
+import com.example.demo.repositories.MyData;
 import com.example.demo.repositories.MyDataRepository;
 
 @Service
@@ -22,32 +26,48 @@ public class MyDataService {
 	@Autowired // 自動的にインスタンスが生成 => MyDataRepositoryってインターフェースだよ？ => Spring MVC により無名クラスのインスタンスが作成
 	MyDataRepository repository; // => MyDataRepository(インターフェース) => 無名クラス => インスタンス => Bean => Beanのインスタンス
 
+	/*
+	 * entityManager の Bean を取得してフィールドに設定。springBoot では自動的にインスタンスがBeanとして登録されている
+	 * @Autowiredとの違いがわからない
+	 */
+	@PersistenceContext
+	EntityManager entityManager;
+
+	@PostConstruct
+	public void init() {
+		dao = new MyDataDaoImpl(entityManager);
+	}
+	MyDataDaoImpl dao;
+
 	// 全レコード取得
 	public List<MyData> selectAll() {
-		List<MyData> list = repository.findAll();
+		List<MyData> list = dao.getAll();
 		return list;
 	}
 
 	// 登録
 	public void create(MyData data) {
-		repository.saveAndFlush(data);
+		dao.create(data);
 	}
 
 	// 一件、レコード取得
 	public MyData findById(long id) {
-		Optional<MyData> data = repository.findById(id);
-		return data.get();
+		MyData data = dao.findById(id);
+		return data;
 	}
 
 	// 一件、レコード更新
 	public void update(MyData data) {
-		repository.saveAndFlush(data);
+		dao.update(data);
+		// repository.saveAndFlush(data);
 	}
 
 	// 一件、レコード削除
 	public void delete(int id) {
-		long longId = id;
-		repository.deleteById(longId);
+		MyData data = dao.findById(id);
+		dao.delete(data);
+		// long longId = id;
+		// repository.deleteById(longId);
 	}
 
 	// 存在チェック

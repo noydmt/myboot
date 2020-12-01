@@ -3,8 +3,6 @@ package com.example.demo.repositories;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
-import com.example.demo.MyData;
-
 /*
  * 注意：Repositoryクラスは@SpringBootApplicationが定義されているファイルが属するパッケージ配下に作成すること
  * @SpringBootApplicationが定義されているクラスからパッケージスキャンが行われる為、別パッケージにするとRepositoryのスキャンが行われず

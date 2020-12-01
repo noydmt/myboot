@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import com.example.demo.repositories.MyData;
 import com.example.demo.service.MyDataService;
 
 //@RestController JSON形式のデータを返す => Restfulなサービス作成
@@ -64,7 +65,8 @@ public class HelloController {
 	// 更新
 	@RequestMapping(value="/edit", method=RequestMethod.POST)
 	@Transactional(readOnly=false)
-	public ModelAndView update(@ModelAttribute("dataObject") @Validated MyData myData, BindingResult result, RedirectAttributes redirectAttributes, ModelAndView mav) {
+	public ModelAndView update(@ModelAttribute("dataObject") @Validated MyData myData, BindingResult result,
+			RedirectAttributes redirectAttributes, ModelAndView mav) {
 		if(!result.hasErrors()) {
 			if(service.exist(myData)) {
 				service.update(myData);
