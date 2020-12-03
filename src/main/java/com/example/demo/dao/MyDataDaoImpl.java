@@ -7,6 +7,7 @@ import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
 
 import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.example.demo.repositories.MyData;
 
@@ -64,5 +65,14 @@ public class MyDataDaoImpl implements MyDataDao<MyData> {
 	public MyData findById(long id) {
 		Query query = entityManager.createQuery("from MyData where id = " + id);
 		return (MyData) query.getSingleResult();
+	}
+
+	@Transactional(readOnly=true)
+	@SuppressWarnings("unchecked")
+	@Override
+	public List<MyData> findByName(String name){
+		Query query = entityManager.createQuery("from MyData where name like ?1 ");
+		query.setParameter(1, "%" + name + "%");
+		return (List<MyData>)query.getResultList();
 	}
 }

@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+</head>
+<body>
+	<h2>検索</h2>
+	<p><a href="/">TOPページ</a></p>
+	<form action="/find" method="post">
+		<div>
+			<p><label>検索 :</label><input type="text" name="keyWord" th:value="${value}" size="20" /></p>
+		</div>
+		<input type="submit" value="submit">
+	</form>
+	<!-- #TODO 検索件数出力 --><h3 th:if="${resultCnt} == '' ">検索結果: <span th:text="${resultCnt}"></span></h3>
+	<table>
+		<tr><td>ID</td><td>NAME</td><td>AGE</td><td>EMAIL</td></tr>
+		<tr th:each="obj : ${datalist}">
+			<td th:text="${obj.id}"></td>
+			<td th:text="${obj.name}"></td>
+			<td th:text="${obj.age}"></td>
+			<td th:text="${obj.mail}"></td>
+		</tr>
+	</table>
+</body>
+</html>

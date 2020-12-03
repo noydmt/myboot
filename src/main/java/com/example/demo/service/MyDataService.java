@@ -70,6 +70,12 @@ public class MyDataService {
 		// repository.deleteById(longId);
 	}
 
+	// 検索
+	public List<MyData> search(String name){
+		List<MyData> list = dao.findByName(name);
+		return list;
+	}
+
 	// 存在チェック
 	public boolean exist(MyData data) {
 		long id = data.getId();

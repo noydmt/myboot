@@ -2,6 +2,8 @@ package com.example.demo;
 
 import java.util.List;
 
+import javax.servlet.http.HttpServletRequest;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.transaction.annotation.Transactional;
@@ -52,6 +54,28 @@ public class HelloController {
 		mav.setViewName("index");
 		return mav;
 	}
+
+	// 検索画面へ遷移
+	@RequestMapping(value="/find", method=RequestMethod.GET)
+	public ModelAndView find(ModelAndView mav) {
+		List<MyData> list = service.selectAll();
+		mav.addObject("datalist", list);
+		mav.setViewName("find");
+		return mav;
+	}
+
+	//検索処理
+	@RequestMapping(value="/find", method=RequestMethod.POST)
+	public ModelAndView search(ModelAndView mav, HttpServletRequest req) {
+		String keyWord = req.getParameter("keyWord");
+		List<MyData>list = service.search(keyWord);
+		int size = list.size();
+		mav.addObject("datalist", list);
+		mav.addObject("resultCnt", String.valueOf(size));
+		mav.setViewName("find");
+		return mav;
+	}
+
 
 	// 編集画面
 	@RequestMapping(value="/{id}", method=RequestMethod.GET)
