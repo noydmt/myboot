@@ -71,7 +71,8 @@ public class HelloController {
 		List<MyData>list = service.search(keyWord);
 		int size = list.size();
 		mav.addObject("datalist", list);
-		mav.addObject("resultCnt", String.valueOf(size));
+		mav.addObject("value", keyWord);
+		mav.addObject("countMsg", "検索結果： " + String.valueOf(size) + " 件");
 		mav.setViewName("find");
 		return mav;
 	}
