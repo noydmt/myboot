@@ -1,5 +1,6 @@
 package com.example.demo.service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -71,8 +72,13 @@ public class MyDataService {
 	}
 
 	// 検索
-	public List<MyData> search(String name){
-		List<MyData> list = dao.findByName(name);
+	public List<MyData> search(String kwName, String kwMail, String kwMinAge, String kwMaxAge){
+		List<MyData> list = new ArrayList<MyData>();
+		if("".equals(kwName) && "".equals(kwMail) && "".equals(kwMinAge) && "".equals(kwMaxAge)) {
+			list = dao.getAll();
+		} else {
+			list = dao.findByName(kwName,kwMail,kwMinAge,kwMaxAge);
+		}
 		return list;
 	}
 

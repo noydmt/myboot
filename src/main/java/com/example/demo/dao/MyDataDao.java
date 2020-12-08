@@ -15,5 +15,5 @@ public interface MyDataDao <T> extends Serializable {
 	public void update(T data);
 	public void delete(T data);
 	public T findById(long id);
-	public List<T> findByName(String name);
+	public List<T> findByName(String name, String mail, String minAge, String maxAge);
 }

@@ -18,10 +18,6 @@ import javax.persistence.NamedQuery;
 
 @Entity // Entity クラスであることを示す
 @Table(name="mydata") // 使用するテーブル名の指定 記述しない場合、クラス名がテーブル名に成りかわる
-@NamedQuery(
-		name="findWithFreeword",
-		query="from mydata where name like :fname or mail like :fmail or memo like :fmemo"
-)
 public class MyData {
 
 	@Id // primary key

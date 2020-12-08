@@ -67,11 +67,14 @@ public class HelloController {
 	//検索処理
 	@RequestMapping(value="/find", method=RequestMethod.POST)
 	public ModelAndView search(ModelAndView mav, HttpServletRequest req) {
-		String keyWord = req.getParameter("keyWord");
-		List<MyData>list = service.search(keyWord);
+		String kwName = req.getParameter("kwName");
+		String kwMail = req.getParameter("kwMail");
+		String kwMinAge = req.getParameter("kwMinAge");
+		String kwMaxAge = req.getParameter("kwMaxAge");
+		List<MyData>list = service.search(kwName,kwMail,kwMinAge,kwMaxAge);
 		int size = list.size();
 		mav.addObject("datalist", list);
-		mav.addObject("value", keyWord);
+		mav.addObject("nameValue", kwName);
 		mav.addObject("countMsg", "検索結果： " + String.valueOf(size) + " 件");
 		mav.setViewName("find");
 		return mav;

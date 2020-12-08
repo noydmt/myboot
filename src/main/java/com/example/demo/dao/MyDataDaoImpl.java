@@ -70,9 +70,46 @@ public class MyDataDaoImpl implements MyDataDao<MyData> {
 	@Transactional(readOnly=true)
 	@SuppressWarnings("unchecked")
 	@Override
-	public List<MyData> findByName(String name){
-		Query query = entityManager.createQuery("from MyData where name like ?1 ");
-		query.setParameter(1, "%" + name + "%");
+	public List<MyData> findByName(String kwName,String kwMail,
+			String kwMinAge, String kwMaxAge){
+		StringBuilder sql = new StringBuilder();
+		sql.append("select d from MyData d where");
+
+		boolean kwNameFlg = false;
+		boolean kwMailFlg = false;
+		boolean kwMinAgeFlg = false;
+		boolean kwMaxAgeFlg = false;
+		boolean andFlg = false;
+
+		if(!"".equals(kwName)) {
+			sql.append("d.name like :name");
+			kwNameFlg = true;
+			andFlg = true;
+		}
+		if(!"".equals(kwMail)) {
+			if(andFlg) sql.append(" and ");
+			sql.append("d.mail like :mail");
+			kwMailFlg = true;
+			andFlg = true;
+		}
+		if(!"".equals(kwMinAge)) {
+			if(andFlg) sql.append(" and ");
+			sql.append("d.age > :minAge");
+			kwMinAgeFlg = true;
+			andFlg = true;
+		}
+		if(!"".equals(kwMaxAge)) {
+			if(andFlg) sql.append(" and ");
+			sql.append("d.age < :maxAge");
+			kwMaxAgeFlg = true;
+			andFlg = true;
+		}
+
+		Query query = entityManager.createQuery(sql.toString());
+		if(kwNameFlg) query.setParameter("name", "%" + kwName + "%");
+		if(kwMailFlg) query.setParameter("mail", "%" + kwMail + "%");
+		if(kwMinAgeFlg) query.setParameter("minAge", kwMinAge);
+		if(kwMaxAgeFlg) query.setParameter("maxAge", kwMaxAge);
 		return (List<MyData>)query.getResultList();
 	}
 }
