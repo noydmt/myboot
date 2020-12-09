@@ -3,6 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <title>Insert title here</title>
+<script src="../js/index.js"></script>
 </head>
 <body>
 	<h2>検索</h2>
@@ -21,13 +22,15 @@
 		<input type="submit" value="submit">
 	</form>
 	<table>
-		<tr><td th:text="${countMsg}"></td><td></td><td></td><td></td></tr>
-		<tr><td>ID</td><td>NAME</td><td>AGE</td><td>EMAIL</td></tr>
+		<tr><td th:text="${countMsg}"></td><td></td><td></td><td></td><td></td><td></td></tr>
+		<tr><td>ID</td><td>NAME</td><td>AGE</td><td>EMAIL</td><td></td><td></td></tr>
 		<tr th:each="obj : ${datalist}">
 			<td th:text="${obj.id}"></td>
 			<td th:text="${obj.name}"></td>
 			<td th:text="${obj.age}"></td>
 			<td th:text="${obj.mail}"></td>
+			<td id="editBtn"><a th:href="@{/{id}(id=${obj.id})}">edit</a></td>
+			<td><Button id="deleteBtn">delete</Button></td>
 		</tr>
 	</table>
 </body>

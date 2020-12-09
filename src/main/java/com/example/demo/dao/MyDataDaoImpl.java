@@ -73,7 +73,7 @@ public class MyDataDaoImpl implements MyDataDao<MyData> {
 	public List<MyData> findByName(String kwName,String kwMail,
 			String kwMinAge, String kwMaxAge){
 		StringBuilder sql = new StringBuilder();
-		sql.append("select d from MyData d where");
+		sql.append("from MyData where");
 
 		boolean kwNameFlg = false;
 		boolean kwMailFlg = false;
@@ -82,25 +82,25 @@ public class MyDataDaoImpl implements MyDataDao<MyData> {
 		boolean andFlg = false;
 
 		if(!"".equals(kwName)) {
-			sql.append("d.name like :name");
+			sql.append(" name like :name");
 			kwNameFlg = true;
 			andFlg = true;
 		}
 		if(!"".equals(kwMail)) {
 			if(andFlg) sql.append(" and ");
-			sql.append("d.mail like :mail");
+			sql.append("mail like :mail");
 			kwMailFlg = true;
 			andFlg = true;
 		}
 		if(!"".equals(kwMinAge)) {
 			if(andFlg) sql.append(" and ");
-			sql.append("d.age > :minAge");
+			sql.append("age > :minAge");
 			kwMinAgeFlg = true;
 			andFlg = true;
 		}
 		if(!"".equals(kwMaxAge)) {
 			if(andFlg) sql.append(" and ");
-			sql.append("d.age < :maxAge");
+			sql.append("age < :maxAge");
 			kwMaxAgeFlg = true;
 			andFlg = true;
 		}

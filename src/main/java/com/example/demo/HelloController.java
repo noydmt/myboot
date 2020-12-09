@@ -75,6 +75,9 @@ public class HelloController {
 		int size = list.size();
 		mav.addObject("datalist", list);
 		mav.addObject("nameValue", kwName);
+		mav.addObject("mailValue", kwMail);
+		mav.addObject("minAgeValue", kwMinAge);
+		mav.addObject("maxAgeValue", kwMaxAge);
 		mav.addObject("countMsg", "検索結果： " + String.valueOf(size) + " 件");
 		mav.setViewName("find");
 		return mav;
