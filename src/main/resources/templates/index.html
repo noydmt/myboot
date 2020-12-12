@@ -8,7 +8,21 @@ h1{ font-size: 18pt; }
 body{ font-size:13pt; }
 postedResult{border:1px black solid; margin: 30px; padding:20px;}
 </style>
-<script type="text/javascript" th:src="@{/js/index.js}"></script>
+<script th:inline="javascript">
+/*<![CDATA[*/
+var message = [[${msg}]];
+if(message != null) alert(message);
+var deleteForm = document.getElementById('deleteForm');
+var deleteBtn = document.getElementById('deleteBtn');
+deleteBtn.addEventListener('click', function(){
+var ret = confirm("削除します。よろしいですか？");
+if(ret) {
+	deleteForm.submit();
+}
+}, false)
+/*]]>*/
+</script>
+
 </head>
 <body>
 	<h1>hello sample page</h1>

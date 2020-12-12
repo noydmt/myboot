@@ -5,6 +5,9 @@ import java.util.List;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
+import javax.persistence.criteria.CriteriaBuilder;
+import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Root;
 
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
@@ -35,11 +38,18 @@ public class MyDataDaoImpl implements MyDataDao<MyData> {
 
 	@Override
 	public List<MyData> getAll(){
-		Query query = entityManager.createQuery("from MyData"); // query : sql文に相当するオブジェクト
-		@SuppressWarnings("unchecked") // ビルド時に警告が出ないようにする。無くても構わない。
-		List<MyData> list = query.getResultList();
-		entityManager.clear();
-		entityManager.close();
+		List<MyData> list = null;
+		CriteriaBuilder builder = entityManager.getCriteriaBuilder();
+		CriteriaQuery<MyData> query = builder.createQuery(MyData.class);
+		Root<MyData> root = query.from(MyData.class);
+		query.select(root);
+		list = (List<MyData>)entityManager.createQuery(query).getResultList();
+
+//		Query query = entityManager.createQuery("from MyData"); // query : sql文に相当するオブジェクト
+//		@SuppressWarnings("unchecked") // ビルド時に警告が出ないようにする。無くても構わない。
+//		List<MyData> list = query.getResultList();
+//		entityManager.clear();
+//		entityManager.close();
 		return list;
 	}
 
@@ -88,19 +98,19 @@ public class MyDataDaoImpl implements MyDataDao<MyData> {
 		}
 		if(!"".equals(kwMail)) {
 			if(andFlg) sql.append(" and ");
-			sql.append("mail like :mail");
+			sql.append(" mail like :mail");
 			kwMailFlg = true;
 			andFlg = true;
 		}
 		if(!"".equals(kwMinAge)) {
 			if(andFlg) sql.append(" and ");
-			sql.append("age > :minAge");
+			sql.append(" age > :minAge ");
 			kwMinAgeFlg = true;
 			andFlg = true;
 		}
 		if(!"".equals(kwMaxAge)) {
 			if(andFlg) sql.append(" and ");
-			sql.append("age < :maxAge");
+			sql.append(" age < :maxAge ");
 			kwMaxAgeFlg = true;
 			andFlg = true;
 		}
