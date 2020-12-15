@@ -60,15 +60,12 @@ public class MyDataService {
 	// 一件、レコード更新
 	public void update(MyData data) {
 		dao.update(data);
-		// repository.saveAndFlush(data);
 	}
 
 	// 一件、レコード削除
 	public void delete(int id) {
 		MyData data = dao.findById(id);
 		dao.delete(data);
-		// long longId = id;
-		// repository.deleteById(longId);
 	}
 
 	// 検索

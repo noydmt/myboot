@@ -1,5 +1,6 @@
 package com.example.demo.dao;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.persistence.EntityManager;
@@ -7,6 +8,7 @@ import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
 
 import org.springframework.stereotype.Repository;
@@ -44,12 +46,6 @@ public class MyDataDaoImpl implements MyDataDao<MyData> {
 		Root<MyData> root = query.from(MyData.class);
 		query.select(root);
 		list = (List<MyData>)entityManager.createQuery(query).getResultList();
-
-//		Query query = entityManager.createQuery("from MyData"); // query : sql文に相当するオブジェクト
-//		@SuppressWarnings("unchecked") // ビルド時に警告が出ないようにする。無くても構わない。
-//		List<MyData> list = query.getResultList();
-//		entityManager.clear();
-//		entityManager.close();
 		return list;
 	}
 
@@ -73,8 +69,12 @@ public class MyDataDaoImpl implements MyDataDao<MyData> {
 
 	@Override
 	public MyData findById(long id) {
-		Query query = entityManager.createQuery("from MyData where id = " + id);
-		return (MyData) query.getSingleResult();
+		CriteriaBuilder builder = entityManager.getCriteriaBuilder();
+		CriteriaQuery<MyData> query = builder.createQuery(MyData.class);
+		Root<MyData> root = query.from(MyData.class);
+		query.select(root).where(builder.equal(root.get("id"), id));
+		MyData list = (MyData)entityManager.createQuery(query).getSingleResult();
+		return list;
 	}
 
 	@Transactional(readOnly=true)
@@ -82,44 +82,52 @@ public class MyDataDaoImpl implements MyDataDao<MyData> {
 	@Override
 	public List<MyData> findByName(String kwName,String kwMail,
 			String kwMinAge, String kwMaxAge){
-		StringBuilder sql = new StringBuilder();
-		sql.append("from MyData where");
+		CriteriaBuilder builder = entityManager.getCriteriaBuilder();
+		CriteriaQuery<MyData> query = builder.createQuery(MyData.class);
+		Root<MyData> root = query.from(MyData.class);
+		List<Predicate> predicates = new ArrayList<Predicate>();
 
-		boolean kwNameFlg = false;
-		boolean kwMailFlg = false;
-		boolean kwMinAgeFlg = false;
-		boolean kwMaxAgeFlg = false;
 		boolean andFlg = false;
 
 		if(!"".equals(kwName)) {
-			sql.append(" name like :name");
-			kwNameFlg = true;
+			String likeName = "%"+kwName+"%";
 			andFlg = true;
+			predicates.add(builder.like(root.get("name"), likeName));
 		}
 		if(!"".equals(kwMail)) {
-			if(andFlg) sql.append(" and ");
-			sql.append(" mail like :mail");
-			kwMailFlg = true;
-			andFlg = true;
-		}
-		if(!"".equals(kwMinAge)) {
-			if(andFlg) sql.append(" and ");
-			sql.append(" age > :minAge ");
-			kwMinAgeFlg = true;
-			andFlg = true;
-		}
-		if(!"".equals(kwMaxAge)) {
-			if(andFlg) sql.append(" and ");
-			sql.append(" age < :maxAge ");
-			kwMaxAgeFlg = true;
-			andFlg = true;
+			String likeMail = "%"+kwMail+"%";
+			if(andFlg) {
+				predicates.add(builder.and(builder.like(root.get("mail"), likeMail)));
+			} else {
+				predicates.add(builder.like(root.get("mail"), likeMail));
+				andFlg = true;
+			}
 		}
 
-		Query query = entityManager.createQuery(sql.toString());
-		if(kwNameFlg) query.setParameter("name", "%" + kwName + "%");
-		if(kwMailFlg) query.setParameter("mail", "%" + kwMail + "%");
-		if(kwMinAgeFlg) query.setParameter("minAge", kwMinAge);
-		if(kwMaxAgeFlg) query.setParameter("maxAge", kwMaxAge);
-		return (List<MyData>)query.getResultList();
+		if(!"".equals(kwMinAge)&&!"".equals(kwMaxAge)) {
+			if(andFlg) {
+				predicates.add(builder.and(builder.between(root.get("age"), kwMinAge, kwMaxAge)));
+			} else {
+				predicates.add(builder.between(root.get("age"), kwMinAge, kwMaxAge));
+				andFlg = true;
+			}
+		} else if(!"".equals(kwMinAge)) {
+			if(andFlg) {
+				predicates.add(builder.and(builder.greaterThanOrEqualTo(root.get("age"), kwMinAge)));
+			} else {
+				predicates.add(builder.greaterThanOrEqualTo(root.get("age"), kwMinAge));
+				andFlg = true;
+			}
+		} else if(!"".equals(kwMaxAge)) {
+			if(andFlg) {
+				predicates.add(builder.and(builder.lessThanOrEqualTo(root.get("age"), kwMaxAge)));
+			} else {
+				predicates.add(builder.lessThanOrEqualTo(root.get("age"), kwMaxAge));
+				andFlg = true;
+			}
+		}
+		query.select(root).where(predicates.toArray(new Predicate[]{}));
+		List<MyData> list = entityManager.createQuery(query).getResultList();
+		return list;
 	}
 }

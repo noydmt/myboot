@@ -35,7 +35,7 @@ public class MyData {
 	@Email(message="メールアドレスを入力してください")
 	private String mail;
 
-	@Column(length = 3, nullable = false)
+	@Column(length = 10, nullable = false)
 	@NotBlank(message="年齢を入力してください")
 	@Range(min=0, max=120, message="0歳以上120歳以下") // 年齢はマイナス値はダメ
 	private String age;
