@@ -25,18 +25,23 @@ public class MsgDataDaoImpl implements MsgDataDao<MsgData> {
 		this.em = em;
 	}
 
+	@SuppressWarnings("unchecked")
 	@Override
 	public List<MsgData> getAll(){
 		CriteriaBuilder cb = em.getCriteriaBuilder();
 		CriteriaQuery<MsgData> query = cb.createQuery(MsgData.class);
 		Root<MsgData> root = query.from(MsgData.class);
-		query.select(root);
-		List<MsgData>list = (List<MsgData>)em.createQuery(query).getResultList();
+		List<MsgData> list = (List<MsgData>) query.select(root);
 		return list;
 	}
 
 	@Override
 	public MsgData findById(long id) {
-		return null;
+		CriteriaBuilder cb = em.getCriteriaBuilder();
+		CriteriaQuery<MsgData> query = cb.createQuery(MsgData.class);
+		Root<MsgData> root = query.from(MsgData.class);
+		query.select(root).where(cb.equal(root.get("id"), id));
+		MsgData list = (MsgData)em.createQuery(query).getSingleResult();
+		return list;
 	}
 }

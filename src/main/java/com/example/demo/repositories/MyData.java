@@ -1,5 +1,8 @@
 package com.example.demo.repositories;
 
+import java.util.List;
+
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -15,10 +18,27 @@ import com.sun.istack.NotNull;
 
 import javax.persistence.Id;
 import javax.persistence.NamedQuery;
+import javax.persistence.OneToMany;
 
 @Entity // Entity クラスであることを示す
 @Table(name="mydata") // 使用するテーブル名の指定 記述しない場合、クラス名がテーブル名に成りかわる
 public class MyData {
+
+	@OneToMany(cascade=CascadeType.ALL) // 単体のMyDataに対してMsgDataを複数件持つ
+	@Column(nullable=true) // nullを許容
+	private List<MsgData> msgDatas; // 複数の MsgData を持つのでコレクション形式にする
+	/**
+	 * @return msgDatas
+	 */
+	public List<MsgData> getMsgDatas() {
+		return msgDatas;
+	}
+	/**
+	 * @param msgDatas セットする msgDatas
+	 */
+	public void setMsgDatas(List<MsgData> msgDatas) {
+		this.msgDatas = msgDatas;
+	}
 
 	@Id // primary key
 	@GeneratedValue(strategy = GenerationType.AUTO) // 自動で値を割り振る、 primaryKey の為

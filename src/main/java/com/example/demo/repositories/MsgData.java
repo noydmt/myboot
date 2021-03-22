@@ -28,7 +28,7 @@ public class MsgData {
 	@NotEmpty
 	private String message;
 
-	@ManyToOne
+	@ManyToOne // 複数件の MsgData が一つの MyData に属する
 	private MyData mydata;
 
 	public MsgData() {

@@ -78,7 +78,6 @@ public class MyDataDaoImpl implements MyDataDao<MyData> {
 	}
 
 	@Transactional(readOnly=true)
-	@SuppressWarnings("unchecked")
 	@Override
 	public List<MyData> findByName(String kwName,String kwMail,
 			String kwMinAge, String kwMaxAge){
@@ -86,6 +85,7 @@ public class MyDataDaoImpl implements MyDataDao<MyData> {
 		CriteriaQuery<MyData> query = builder.createQuery(MyData.class);
 		Root<MyData> root = query.from(MyData.class);
 		List<Predicate> predicates = new ArrayList<Predicate>();
+		// 参照：https://www.it-swarm-ja.tech/ja/java/%E8%A4%87%E6%95%B0%E3%81%AE%E3%83%91%E3%83%A9%E3%83%A1%E3%83%BC%E3%82%BF%E3%83%BC%E3%82%92%E6%8C%81%E3%81%A4jpa%E5%9F%BA%E6%BA%96api/1069474853/
 
 		boolean andFlg = false;
 
@@ -94,6 +94,7 @@ public class MyDataDaoImpl implements MyDataDao<MyData> {
 			andFlg = true;
 			predicates.add(builder.like(root.get("name"), likeName));
 		}
+
 		if(!"".equals(kwMail)) {
 			String likeMail = "%"+kwMail+"%";
 			if(andFlg) {
